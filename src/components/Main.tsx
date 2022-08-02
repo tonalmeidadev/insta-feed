@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-interface IFeedItem {
+interface FeedPostsProps {
   id: string
   permalink: string
   media_url: string
@@ -9,24 +9,24 @@ interface IFeedItem {
 }
 
 export function Main() {
-  const [feedList, setFeedList] = useState<IFeedItem[]>([])
+  const [feedPosts, setFeedPosts] = useState<FeedPostsProps[]>([])
 
-  async function getInstaFeed() {
+  async function getPostsInstagram() {
     const token = import.meta.env.VITE_INSTA_TOKEN
     const fields = "media_url,media_type,permalink"
     const url = `https://graph.instagram.com/me/media?access_token=${token}&fields=${fields}`
 
     const { data } =  await axios.get(url)
-    setFeedList(data.data)
+    setFeedPosts(data.data)
   }
 
   useEffect(() => {
-    getInstaFeed()
+    getPostsInstagram()
   }, [])
 
   return (
     <main className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8'>
-      {feedList.map(item => (
+      {feedPosts.map(item => (
         <a
           key={item.id}
           href={item.permalink}
